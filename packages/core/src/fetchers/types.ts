@@ -133,3 +133,14 @@ export interface WakaTimeLang {
   text: string;
   percent: number;
 }
+
+export interface StreakData {
+  currentStreak: number;
+  longestStreak: number;
+  totalContributions: number;
+  firstContribution: string;
+  currentStreakStart: string;
+  currentStreakEnd: string;
+  longestStreakStart: string;
+  longestStreakEnd: string;
+}

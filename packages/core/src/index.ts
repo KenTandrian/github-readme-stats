@@ -19,6 +19,10 @@ export { default as api } from "./api/index.js";
 export { default as pin } from "./api/pin.js";
 export { default as topLangs } from "./api/top-langs.js";
 export { default as wakatime } from "./api/wakatime.js";
+export { default as streak } from "./api/streak.js";
+
+export { fetchStreak } from "./fetchers/streak.js";
+export { renderStreakCard } from "./cards/streak.js";
 
 export { getConfig, loadConfigFromEnv } from "./common/config.js";
 
