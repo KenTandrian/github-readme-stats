@@ -2,6 +2,7 @@ import {
   api,
   gist,
   pin,
+  streak,
   topLangs,
   wakatime,
 } from "@stats-organization/github-readme-stats-core";
@@ -138,6 +139,30 @@ export default async (req, res) => {
           def: CACHE_TTL.PIN_CARD.DEFAULT,
           min: CACHE_TTL.PIN_CARD.MIN,
           max: CACHE_TTL.PIN_CARD.MAX,
+        });
+        setCacheHeaders(res, cacheSeconds);
+      }
+      res.setHeader("Content-Type", "image/svg+xml");
+      res.end(result.content);
+      if (result.status !== "error - permanent") {
+        await storeRequest(req);
+      }
+      break;
+    }
+    case "/api/streak": {
+      result = getGuardResult(req.query, "username", req.query.username);
+      if (!result) {
+        const userPat = await getUserPat(req.query.username);
+        result = await streak(req.query, userPat);
+      }
+      if (result.status === "error - temporary") {
+        setErrorCacheHeaders(res);
+      } else {
+        const cacheSeconds = resolveCacheSeconds({
+          requested: parseInt(req.query.cache_seconds, 10),
+          def: CACHE_TTL.STATS_CARD.DEFAULT,
+          min: CACHE_TTL.STATS_CARD.MIN,
+          max: CACHE_TTL.STATS_CARD.MAX,
         });
         setCacheHeaders(res, cacheSeconds);
       }
