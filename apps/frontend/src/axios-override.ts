@@ -8,18 +8,19 @@ import {
   DEMO_WAKATIME_USER,
   HOST,
 } from "./constants";
-import additionalUserStars from "./mockData/additional_user_stars.json" with { type: "json" };
-import commentedIssues from "./mockData/commented_issues.json" with { type: "json" };
-import commentedPrs from "./mockData/commented_prs.json" with { type: "json" };
-import commits from "./mockData/commits.json" with { type: "json" };
-import contributions from "./mockData/contributions.json" with { type: "json" };
-import gist_graphql from "./mockData/gist-graphql.json" with { type: "json" };
-import gist_rest from "./mockData/gist-rest.json" with { type: "json" };
-import repository from "./mockData/repository.json" with { type: "json" };
-import reviewedPrs from "./mockData/reviewed_prs.json" with { type: "json" };
-import topLanguages from "./mockData/top_languages.json" with { type: "json" };
-import userStats from "./mockData/user_stats.json" with { type: "json" };
-import wakatimeProxy from "./mockData/wakatime_proxy.json" with { type: "json" };
+import additionalUserStars from "./wizard/mockData/additional_user_stars.json" with { type: "json" };
+import commentedIssues from "./wizard/mockData/commented_issues.json" with { type: "json" };
+import commentedPrs from "./wizard/mockData/commented_prs.json" with { type: "json" };
+import commits from "./wizard/mockData/commits.json" with { type: "json" };
+import contributions from "./wizard/mockData/contributions.json" with { type: "json" };
+import gist_graphql from "./wizard/mockData/gist-graphql.json" with { type: "json" };
+import gist_rest from "./wizard/mockData/gist-rest.json" with { type: "json" };
+import reposContributedTo from "./wizard/mockData/repos_contributed_to.json" with { type: "json" };
+import repository from "./wizard/mockData/repository.json" with { type: "json" };
+import reviewedPrs from "./wizard/mockData/reviewed_prs.json" with { type: "json" };
+import topLanguages from "./wizard/mockData/top_languages.json" with { type: "json" };
+import userStats from "./wizard/mockData/user_stats.json" with { type: "json" };
+import wakatimeProxy from "./wizard/mockData/wakatime_proxy.json" with { type: "json" };
 
 const cachedAxios = setupCache(axios, {
   // Cache for 30 minutes
@@ -109,6 +110,14 @@ axios.defaults.adapter = async (config) => {
     params.variables?.login === DEMO_USER
   ) {
     return createMockResponse(contributions, config);
+  }
+
+  if (
+    config.url === "https://api.github.com/graphql" &&
+    params.query?.includes("query userReposContributedTo(") &&
+    params.variables?.login === DEMO_USER
+  ) {
+    return createMockResponse(reposContributedTo, config);
   }
 
   if (
